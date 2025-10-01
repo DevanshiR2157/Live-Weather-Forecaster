@@ -1,0 +1,76 @@
+plugins {
+	id 'java'
+}
+
+/* Needed to pull in dependencies (sinbad.jar)
+   This libs folder is relative to where build.gradle is
+*/
+repositories {
+   flatDir {
+       dirs 'libs'
+   }
+   	mavenCentral()
+}
+
+/*  implementation is for compiling code.
+    For JUnit, grab the dependency from mavenCentral using the POM info
+    for sinbad, grab the dependency from the libs folder.
+    mavenCentral and the libs folder are specified above in the repositories section.
+*/
+dependencies {
+	testImplementation group:'org.junit.jupiter', name:'junit-jupiter', version:'5.6.0'
+	implementation group:'org.junit.jupiter', name:'junit-jupiter', version:'5.6.0'
+	implementation name: 'sinbad'
+	testImplementation name: 'sinbad'
+
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+/* Added the whole sourceSets section, so that the source and test files did NOT have to always follow this structure
+      main/java
+      test/java
+      
+      Eclipse puts them all in the src folder by default, so this sourceSets statement will handle where Eclipse puts 
+      them by default, as well as work with the folder structure expected by Gradle. 
+
+*/
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src", "main/java", "test"]
+	}
+    }
+    test {
+       java {
+           srcDirs = ["src", "test/java", "test"]
+        }
+    }
+}
+
+/*  This is in here for debugging purposes. Not strictly needed. 
+    Gives some info on where gradle is currently looking for files
+    Uncomment the println statements to get debug info.
+*/
+task sourceSetProperties {
+    sourceSets {
+        main {
+         // println "java.srcDirs = ${java.srcDirs}"
+         //   println "resources.srcDirs = ${resources.srcDirs}"
+         //   println "java.files = ${java.files.name}"
+         //   println "allJava.files = ${allJava.files.name}"
+         //   println "resources.files = ${resources.files.name}"
+         //   println "allSource.files = ${allSource.files.name}"
+         //   println "compileClasspath = ${compileClasspath.files.name}"
+         //   println "extensions = ${extensions}"
+  
+         }
+      test{
+       	//	println "runtimeClasspath = ${runtimeClasspath.files.name}"
+      }
+    }
+}
